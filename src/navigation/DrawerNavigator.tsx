@@ -1,0 +1,111 @@
+import React from 'react';
+import { View, Image, Button, FlatList } from 'react-native';
+import {
+  DrawerContentScrollView,
+  DrawerItemList,
+  DrawerContentComponentProps,
+  DrawerContent,
+} from '@react-navigation/drawer';
+import { Text, Divider, Switch, useTheme } from '@rneui/themed';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+
+function CustomContentComponent(
+  props: any
+) {
+  const { updateTheme, theme } = useTheme();
+  // const colorScheme = useColorScheme();
+  const navigation = useNavigation()
+  //console.log({ props })
+  const descs = Object.keys(props.descriptors)
+  // React.useEffect(() => {
+  //   updateTheme({ mode: colorScheme === 'dark' ? 'dark' : 'light' });
+  // }, [colorScheme, updateTheme]);
+  return (
+    <SafeAreaView
+      style={{
+        flex: 1,
+        height: '100%',
+        backgroundColor: theme?.colors?.grey5,
+      }}
+      edges={['right', 'left', 'bottom']}
+    >
+      <View
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        {/*
+        <Image
+          source={require('../images/logo.png')}
+          style={{ width: '70%', height: 100, tintColor: '#397af8' }}
+          resizeMode="contain"
+        />
+        */}
+
+      </View>
+
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          width: '100%',
+          paddingLeft: 25,
+          paddingBottom: 5,
+        }}
+      >
+        <Text
+          style={{
+            marginTop: 3,
+          }}
+        >
+          Dark Mode
+        </Text>
+
+        <Switch
+          style={{
+            position: 'absolute',
+            right: 5,
+          }}
+          value={theme.mode === 'dark'}
+          onValueChange={() => {
+            updateTheme((myTheme) => ({
+              mode: myTheme.mode === 'dark' ? 'light' : 'dark',
+            }));
+          }}
+        />
+      </View>
+      <Divider style={{ marginTop: 15 }} />
+      <View style={{ marginLeft: 10, width: '100%' }}>
+        {/*
+         <DrawerItemList {...props} />
+        */}
+        {
+
+
+          descs.map((i, j) => {
+            return <View><Button title={i.split('-')[0]} color={'blue'} onPress={() => {
+              const link: string = i.split('-')[0] || '';
+
+              navigation.navigate(link)
+            }}></Button></View>
+          })
+        }
+      </View>
+    </SafeAreaView>
+  );
+}
+
+function CustomDrawerContent(
+  props: any
+) {
+  return (
+    <DrawerContentScrollView {...props}>
+      <CustomContentComponent {...props} />
+    </DrawerContentScrollView>
+  );
+}
+
+export default CustomDrawerContent;
